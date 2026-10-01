@@ -209,9 +209,9 @@
             </p>
         </div>
 
-        <button class="add-course-btn">
-            + Add New Course
-        </button>
+        <button class="add-course-btn" id="add-course-btn">
+    + Add New Course
+</button>
 
     </div>
 
@@ -259,7 +259,74 @@
 
                     </table>
 
+                        </section>
+
+
+                <!-- Add New Course Form -->
+                <section id="add-course-form" class="content-card course-form-card">
+
+                    <h3>Add New Course</h3>
+
+                    <p>
+                        Enter the basic information of the course.
+                    </p>
+
+                    <div class="course-form-grid">
+
+                        <div class="form-group">
+                            <label for="course-code">Course Code</label>
+                            <input type="text" id="course-code">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-title">Course Title</label>
+                            <input type="text" id="course-title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-credits">Credits</label>
+                            <input type="number" id="course-credits" step="0.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-hours">Contact Hours/Week</label>
+                            <input type="number" id="contact-hours">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-program">Program</label>
+                            <select id="course-program">
+                                <option value="B.Sc. in EEE">B.Sc. in EEE</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-type">Course Type</label>
+                            <select id="course-type">
+                                <option value="Core">Core</option>
+                                <option value="General">General</option>
+                                <option value="Optional">Optional</option>
+                                <option value="Project">Project</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button" class="save-course-btn">
+                            Save Course
+                        </button>
+
+                        <button type="button" class="cancel-course-btn">
+                            Cancel
+                        </button>
+
+                    </div>
+
                 </section>
+
 
             </section>
 
