@@ -308,3 +308,26 @@ body {
 .course-table tbody tr:hover {
     background: #f8fafc;
 }
+/* Course Master Header */
+
+.content-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.add-course-btn {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    background: #0b3d91;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-course-btn:hover {
+    opacity: 0.9;
+}
