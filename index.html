@@ -1,6 +1,6 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,45 +12,56 @@
 
 <body>
 
-    <!-- Top Header -->
+    <!-- Header -->
     <header class="topbar">
-        <div class="topbar-title">
+
+        <div>
             <h1>DU EEE OBE System</h1>
             <p>Department of Electrical and Electronic Engineering</p>
-            <p>University of Dhaka</p>
         </div>
+
+        <div class="university">
+            University of Dhaka
+        </div>
+
     </header>
 
 
-    <!-- Main Layout -->
-    <div class="layout">
+    <!-- Application Layout -->
+    <div class="app-container">
 
         <!-- Sidebar -->
         <aside class="sidebar">
 
-            <nav class="sidebar-nav">
+            <nav>
 
-                <a href="#" class="nav-link active" data-page="dashboard">
+                <a href="#" class="nav-item active">
+                    <span>⌂</span>
                     Dashboard
                 </a>
 
-                <a href="#" class="nav-link" data-page="obe-setup">
+                <a href="#" class="nav-item">
+                    <span>⚙</span>
                     OBE Setup
                 </a>
 
-                <a href="#" class="nav-link" data-page="courses">
+                <a href="#" class="nav-item">
+                    <span>▣</span>
                     Courses
                 </a>
 
-                <a href="#" class="nav-link" data-page="assessment">
+                <a href="#" class="nav-item">
+                    <span>✎</span>
                     Assessment
                 </a>
 
-                <a href="#" class="nav-link" data-page="obe-analysis">
+                <a href="#" class="nav-item">
+                    <span>▥</span>
                     OBE Analysis
                 </a>
 
-                <a href="#" class="nav-link" data-page="reports">
+                <a href="#" class="nav-item">
+                    <span>▤</span>
                     Reports
                 </a>
 
@@ -62,379 +73,116 @@
         <!-- Main Content -->
         <main class="main-content">
 
+            <div class="page-header">
 
-            <!-- ========================= -->
-            <!-- Dashboard Page             -->
-            <!-- ========================= -->
+                <h2>Dashboard</h2>
 
-            <section id="dashboard-page" class="page-section active">
-
-                <div class="page-header">
-                    <h2>Dashboard</h2>
-                    <p>Outcome-Based Education Management System</p>
-                </div>
-
-
-                <!-- Welcome Card -->
-                <div class="welcome-card">
-
-                    <h3>Welcome to DU EEE OBE System</h3>
-
-                    <p>
-                        This system is designed to support course-level and
-                        program-level Outcome-Based Education activities in the
-                        Department of Electrical and Electronic Engineering,
-                        University of Dhaka.
-                    </p>
-
-                </div>
-
-
-                <!-- Summary Cards -->
-                <div class="summary-grid">
-
-                    <div class="summary-card">
-                        <h4>Programs</h4>
-                        <div class="summary-number">0</div>
-                    </div>
-
-                    <div class="summary-card">
-                        <h4>Courses</h4>
-                        <div class="summary-number">1</div>
-                    </div>
-
-                    <div class="summary-card">
-                        <h4>Course Offerings</h4>
-                        <div class="summary-number">0</div>
-                    </div>
-
-                    <div class="summary-card">
-                        <h4>Students</h4>
-                        <div class="summary-number">0</div>
-                    </div>
-
-                </div>
-
-
-                <!-- Prototype Course -->
-                <div class="prototype-card">
-
-                    <div class="prototype-header">
-                        <h3>Current Prototype Course</h3>
-                    </div>
-
-                    <div class="prototype-content">
-
-                        <div>
-                            <span class="label">Course Code</span>
-                            <strong>0533-PHY-1103</strong>
-                        </div>
-
-                        <div>
-                            <span class="label">Course Title</span>
-                            <strong>Electricity and Magnetism</strong>
-                        </div>
-
-                        <div>
-                            <span class="label">Credits</span>
-                            <strong>1.5</strong>
-                        </div>
-
-                        <div>
-                            <span class="label">Contact Hours</span>
-                            <strong>3 hours/week</strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-<!-- Courses Page -->
-<section id="courses-page" class="page-section">
-
-    <div class="page-header-row">
-
-        <div>
-            <h2>Courses</h2>
-            <p>
-                Manage course master information for the EEE academic programs.
-            </p>
-        </div>
-
-        <button class="primary-button" id="add-course-button">
-            + Add New Course
-        </button>
-
-    </div>
-
-
-    <!-- Course Master -->
-    <div class="content-card">
-
-        <div class="content-card-header">
-
-            <div>
-                <h3>Course Master</h3>
                 <p>
-                    Basic information about courses offered by the department.
+                    Outcome-Based Education Management System
                 </p>
+
             </div>
 
-        </div>
+
+            <!-- Welcome Card -->
+            <section class="welcome-card">
+
+                <h2>Welcome to DU EEE OBE System</h2>
+
+                <p>
+                    A centralized system for managing Outcome-Based Education,
+                    assessment, attainment analysis, and accreditation-related
+                    activities of the Department of Electrical and Electronic
+                    Engineering, University of Dhaka.
+                </p>
+
+            </section>
 
 
-        <div class="table-container">
+            <!-- Summary Cards -->
+            <section class="summary-grid">
 
-            <table class="course-table">
+                <div class="summary-card">
 
-                <thead>
-                    <tr>
-                        <th>Course Code</th>
-                        <th>Course Title</th>
-                        <th>Credits</th>
-                        <th>Contact Hours</th>
-                        <th>Program</th>
-                        <th>Course Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                    <h3>Programs</h3>
 
-                <tbody>
+                    <div class="number">0</div>
 
-                    <tr>
+                    <p>Active Programs</p>
 
-                        <td>
-                            <strong>0533-PHY-1103</strong>
-                        </td>
+                </div>
 
-                        <td>
-                            Electricity and Magnetism
-                        </td>
 
-                        <td>
-                            1.5
-                        </td>
+                <div class="summary-card">
 
-                        <td>
-                            3 / week
-                        </td>
+                    <h3>Courses</h3>
 
-                        <td>
-                            B.Sc. in EEE
-                        </td>
+                    <div class="number">0</div>
 
-                        <td>
-                            Core
-                        </td>
+                    <p>Course Master</p>
 
-                        <td>
-                            <span class="status-active">
-                                Active
-                            </span>
-                        </td>
+                </div>
 
-                        <td>
-                            <button class="table-action">
-                                View
-                            </button>
-                        </td>
 
-                    </tr>
+                <div class="summary-card">
 
-                </tbody>
+                    <h3>Course Offerings</h3>
 
-            </table>
+                    <div class="number">0</div>
 
-        </div>
+                    <p>Active Offerings</p>
 
-    </div>
+                </div>
 
-</section>
 
-            <!-- ========================= -->
-            <!-- Courses Page               -->
-            <!-- ========================= -->
+                <div class="summary-card">
 
-            <section id="courses-page" class="page-section">
+                    <h3>Students</h3>
 
-                <div class="page-header-row">
+                    <div class="number">0</div>
+
+                    <p>Registered Students</p>
+
+                </div>
+
+            </section>
+
+
+            <!-- Prototype Course -->
+            <section class="prototype-card">
+
+                <h3>Current Prototype Course</h3>
+
+                <div class="course-info">
 
                     <div>
-                        <h2>Courses</h2>
-                        <p>
-                            Manage course master information for the EEE
-                            academic programs.
-                        </p>
+                        <span>Course Code</span>
+                        <strong>0533-PHY-1103</strong>
                     </div>
 
-                    <button class="primary-button" id="add-course-button">
-                        + Add New Course
-                    </button>
-
-                </div>
-
-
-                <!-- Course Master -->
-                <div class="content-card">
-
-                    <div class="content-card-header">
-
-                        <div>
-                            <h3>Course Master</h3>
-                            <p>
-                                Basic information about courses offered by
-                                the department.
-                            </p>
-                        </div>
-
+                    <div>
+                        <span>Course Title</span>
+                        <strong>Electricity and Magnetism</strong>
                     </div>
 
+                    <div>
+                        <span>Credits</span>
+                        <strong>1.5</strong>
+                    </div>
 
-                    <!-- Course Table -->
-                    <div class="table-container">
-
-                        <table class="course-table">
-
-                            <thead>
-                                <tr>
-                                    <th>Course Code</th>
-                                    <th>Course Title</th>
-                                    <th>Credits</th>
-                                    <th>Contact Hours</th>
-                                    <th>Program</th>
-                                    <th>Course Type</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                <tr>
-
-                                    <td>
-                                        <strong>0533-PHY-1103</strong>
-                                    </td>
-
-                                    <td>
-                                        Electricity and Magnetism
-                                    </td>
-
-                                    <td>
-                                        1.5
-                                    </td>
-
-                                    <td>
-                                        3 / week
-                                    </td>
-
-                                    <td>
-                                        B.Sc. in EEE
-                                    </td>
-
-                                    <td>
-                                        Core
-                                    </td>
-
-                                    <td>
-                                        <span class="status-active">
-                                            Active
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button class="table-action">
-                                            View
-                                        </button>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
+                    <div>
+                        <span>Contact Hours</span>
+                        <strong>3 hours/week</strong>
                     </div>
 
                 </div>
 
             </section>
-
-
-            <!-- ========================= -->
-            <!-- Placeholder Pages           -->
-            <!-- ========================= -->
-
-            <section id="obe-setup-page" class="page-section">
-
-                <div class="page-header">
-                    <h2>OBE Setup</h2>
-                    <p>Programs, PEOs, POs and BAETE framework settings.</p>
-                </div>
-
-                <div class="content-card">
-                    <h3>OBE Setup</h3>
-                    <p>This module will be developed next.</p>
-                </div>
-
-            </section>
-
-
-            <section id="assessment-page" class="page-section">
-
-                <div class="page-header">
-                    <h2>Assessment</h2>
-                    <p>Manage assessment components, questions and marks.</p>
-                </div>
-
-                <div class="content-card">
-                    <h3>Assessment</h3>
-                    <p>This module will be developed later.</p>
-                </div>
-
-            </section>
-
-
-            <section id="obe-analysis-page" class="page-section">
-
-                <div class="page-header">
-                    <h2>OBE Analysis</h2>
-                    <p>Analyze CO and PO attainment and CQI.</p>
-                </div>
-
-                <div class="content-card">
-                    <h3>OBE Analysis</h3>
-                    <p>This module will be developed later.</p>
-                </div>
-
-            </section>
-
-
-            <section id="reports-page" class="page-section">
-
-                <div class="page-header">
-                    <h2>Reports</h2>
-                    <p>Generate course and program-level OBE reports.</p>
-                </div>
-
-                <div class="content-card">
-                    <h3>Reports</h3>
-                    <p>This module will be developed later.</p>
-                </div>
-
-            </section>
-
 
         </main>
 
     </div>
 
-
-    <!-- JavaScript -->
-    <script src="js/app.js"></script>
-
 </body>
+
 </html>
-```
