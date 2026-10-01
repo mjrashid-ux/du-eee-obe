@@ -12,47 +12,101 @@
 
 <body>
 
+    <!-- Skip Navigation -->
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
+
+
     <!-- Top Header -->
     <header class="topbar">
+
         <div class="topbar-title">
+
             <h1>DU EEE OBE System</h1>
+
             <p>Department of Electrical and Electronic Engineering</p>
+
             <p>University of Dhaka</p>
+
         </div>
+
     </header>
 
 
-    <!-- Main Layout -->
+    <!-- Main Application Layout -->
     <div class="layout">
 
-        <!-- Sidebar -->
+
+        <!-- Sidebar Navigation -->
         <aside class="sidebar">
 
-            <nav class="sidebar-nav">
+            <nav aria-label="Main navigation">
 
-                <a href="#" class="nav-link active" data-page="dashboard">
-                    Dashboard
-                </a>
+                <ul class="sidebar-nav">
 
-                <a href="#" class="nav-link" data-page="obe-setup">
-                    OBE Setup
-                </a>
+                    <li>
+                        <a
+                            href="#dashboard"
+                            class="nav-link active"
+                            data-page="dashboard"
+                            aria-current="page"
+                        >
+                            Dashboard
+                        </a>
+                    </li>
 
-                <a href="#" class="nav-link" data-page="courses">
-                    Courses
-                </a>
+                    <li>
+                        <a
+                            href="#obe-setup"
+                            class="nav-link"
+                            data-page="obe-setup"
+                        >
+                            OBE Setup
+                        </a>
+                    </li>
 
-                <a href="#" class="nav-link" data-page="assessment">
-                    Assessment
-                </a>
+                    <li>
+                        <a
+                            href="#courses"
+                            class="nav-link"
+                            data-page="courses"
+                        >
+                            Courses
+                        </a>
+                    </li>
 
-                <a href="#" class="nav-link" data-page="obe-analysis">
-                    OBE Analysis
-                </a>
+                    <li>
+                        <a
+                            href="#assessment"
+                            class="nav-link"
+                            data-page="assessment"
+                        >
+                            Assessment
+                        </a>
+                    </li>
 
-                <a href="#" class="nav-link" data-page="reports">
-                    Reports
-                </a>
+                    <li>
+                        <a
+                            href="#obe-analysis"
+                            class="nav-link"
+                            data-page="obe-analysis"
+                        >
+                            OBE Analysis
+                        </a>
+                    </li>
+
+                    <li>
+                        <a
+                            href="#reports"
+                            class="nav-link"
+                            data-page="reports"
+                        >
+                            Reports
+                        </a>
+                    </li>
+
+                </ul>
 
             </nav>
 
@@ -60,18 +114,29 @@
 
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main id="main-content" tabindex="-1">
 
 
             <!-- ========================= -->
             <!-- Dashboard Page             -->
             <!-- ========================= -->
 
-            <section id="dashboard-page" class="page-section active">
+            <section
+                id="dashboard-page"
+                class="page-section active"
+                aria-labelledby="dashboard-heading"
+            >
 
                 <div class="page-header">
-                    <h2>Dashboard</h2>
-                    <p>Outcome-Based Education Management System</p>
+
+                    <h2 id="dashboard-heading">
+                        Dashboard
+                    </h2>
+
+                    <p>
+                        Outcome-Based Education Management System
+                    </p>
+
                 </div>
 
 
@@ -91,37 +156,83 @@
 
 
                 <!-- Summary Cards -->
-                <div class="summary-grid">
+                <section
+                    class="summary-grid"
+                    aria-label="System summary"
+                >
 
                     <div class="summary-card">
-                        <h4>Programs</h4>
-                        <div class="summary-number">0</div>
+
+                        <h3>Programs</h3>
+
+                        <div
+                            class="summary-number"
+                            aria-label="0 programs"
+                        >
+                            0
+                        </div>
+
                     </div>
+
 
                     <div class="summary-card">
-                        <h4>Courses</h4>
-                        <div class="summary-number">1</div>
+
+                        <h3>Courses</h3>
+
+                        <div
+                            class="summary-number"
+                            aria-label="1 course"
+                        >
+                            1
+                        </div>
+
                     </div>
+
 
                     <div class="summary-card">
-                        <h4>Course Offerings</h4>
-                        <div class="summary-number">0</div>
+
+                        <h3>Course Offerings</h3>
+
+                        <div
+                            class="summary-number"
+                            aria-label="0 course offerings"
+                        >
+                            0
+                        </div>
+
                     </div>
+
 
                     <div class="summary-card">
-                        <h4>Students</h4>
-                        <div class="summary-number">0</div>
+
+                        <h3>Students</h3>
+
+                        <div
+                            class="summary-number"
+                            aria-label="0 students"
+                        >
+                            0
+                        </div>
+
                     </div>
 
-                </div>
+                </section>
 
 
                 <!-- Prototype Course -->
-                <div class="prototype-card">
+                <section
+                    class="prototype-card"
+                    aria-labelledby="prototype-course-heading"
+                >
 
                     <div class="prototype-header">
-                        <h3>Current Prototype Course</h3>
+
+                        <h3 id="prototype-course-heading">
+                            Current Prototype Course
+                        </h3>
+
                     </div>
+
 
                     <div class="prototype-content">
 
@@ -147,7 +258,7 @@
 
                     </div>
 
-                </div>
+                </section>
 
             </section>
 
@@ -156,19 +267,34 @@
             <!-- Courses Page               -->
             <!-- ========================= -->
 
-            <section id="courses-page" class="page-section">
+            <section
+                id="courses-page"
+                class="page-section"
+                aria-labelledby="courses-heading"
+                hidden
+            >
 
                 <div class="page-header-row">
 
                     <div>
-                        <h2>Courses</h2>
+
+                        <h2 id="courses-heading">
+                            Courses
+                        </h2>
+
                         <p>
                             Manage course master information for the EEE
                             academic programs.
                         </p>
+
                     </div>
 
-                    <button class="primary-button" id="add-course-button">
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="add-course-button"
+                    >
                         + Add New Course
                     </button>
 
@@ -176,16 +302,24 @@
 
 
                 <!-- Course Master -->
-                <div class="content-card">
+                <section
+                    class="content-card"
+                    aria-labelledby="course-master-heading"
+                >
 
                     <div class="content-card-header">
 
                         <div>
-                            <h3>Course Master</h3>
+
+                            <h3 id="course-master-heading">
+                                Course Master
+                            </h3>
+
                             <p>
                                 Basic information about courses offered by
                                 the department.
                             </p>
+
                         </div>
 
                     </div>
@@ -196,18 +330,50 @@
 
                         <table class="course-table">
 
+                            <caption>
+                                Course Master List
+                            </caption>
+
                             <thead>
+
                                 <tr>
-                                    <th>Course Code</th>
-                                    <th>Course Title</th>
-                                    <th>Credits</th>
-                                    <th>Contact Hours</th>
-                                    <th>Program</th>
-                                    <th>Course Type</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+
+                                    <th scope="col">
+                                        Course Code
+                                    </th>
+
+                                    <th scope="col">
+                                        Course Title
+                                    </th>
+
+                                    <th scope="col">
+                                        Credits
+                                    </th>
+
+                                    <th scope="col">
+                                        Contact Hours
+                                    </th>
+
+                                    <th scope="col">
+                                        Program
+                                    </th>
+
+                                    <th scope="col">
+                                        Course Type
+                                    </th>
+
+                                    <th scope="col">
+                                        Status
+                                    </th>
+
+                                    <th scope="col">
+                                        Action
+                                    </th>
+
                                 </tr>
+
                             </thead>
+
 
                             <tbody>
 
@@ -244,9 +410,15 @@
                                     </td>
 
                                     <td>
-                                        <button class="table-action">
+
+                                        <button
+                                            type="button"
+                                            class="table-action"
+                                            aria-label="View Electricity and Magnetism course"
+                                        >
                                             View
                                         </button>
+
                                     </td>
 
                                 </tr>
@@ -257,70 +429,154 @@
 
                     </div>
 
-                </div>
+                </section>
 
             </section>
 
 
             <!-- ========================= -->
-            <!-- Placeholder Pages           -->
+            <!-- OBE Setup Page             -->
             <!-- ========================= -->
 
-            <section id="obe-setup-page" class="page-section">
+            <section
+                id="obe-setup-page"
+                class="page-section"
+                aria-labelledby="obe-setup-heading"
+                hidden
+            >
 
                 <div class="page-header">
-                    <h2>OBE Setup</h2>
-                    <p>Programs, PEOs, POs and BAETE framework settings.</p>
+
+                    <h2 id="obe-setup-heading">
+                        OBE Setup
+                    </h2>
+
+                    <p>
+                        Programs, PEOs, POs and BAETE framework settings.
+                    </p>
+
                 </div>
 
+
                 <div class="content-card">
+
                     <h3>OBE Setup</h3>
-                    <p>This module will be developed next.</p>
+
+                    <p>
+                        This module will be developed next.
+                    </p>
+
                 </div>
 
             </section>
 
 
-            <section id="assessment-page" class="page-section">
+            <!-- ========================= -->
+            <!-- Assessment Page            -->
+            <!-- ========================= -->
+
+            <section
+                id="assessment-page"
+                class="page-section"
+                aria-labelledby="assessment-heading"
+                hidden
+            >
 
                 <div class="page-header">
-                    <h2>Assessment</h2>
-                    <p>Manage assessment components, questions and marks.</p>
+
+                    <h2 id="assessment-heading">
+                        Assessment
+                    </h2>
+
+                    <p>
+                        Manage assessment components, questions and marks.
+                    </p>
+
                 </div>
 
+
                 <div class="content-card">
+
                     <h3>Assessment</h3>
-                    <p>This module will be developed later.</p>
+
+                    <p>
+                        This module will be developed later.
+                    </p>
+
                 </div>
 
             </section>
 
 
-            <section id="obe-analysis-page" class="page-section">
+            <!-- ========================= -->
+            <!-- OBE Analysis Page          -->
+            <!-- ========================= -->
+
+            <section
+                id="obe-analysis-page"
+                class="page-section"
+                aria-labelledby="obe-analysis-heading"
+                hidden
+            >
 
                 <div class="page-header">
-                    <h2>OBE Analysis</h2>
-                    <p>Analyze CO and PO attainment and CQI.</p>
+
+                    <h2 id="obe-analysis-heading">
+                        OBE Analysis
+                    </h2>
+
+                    <p>
+                        Analyze CO and PO attainment and CQI.
+                    </p>
+
                 </div>
 
+
                 <div class="content-card">
+
                     <h3>OBE Analysis</h3>
-                    <p>This module will be developed later.</p>
+
+                    <p>
+                        This module will be developed later.
+                    </p>
+
                 </div>
 
             </section>
 
 
-            <section id="reports-page" class="page-section">
+            <!-- ========================= -->
+            <!-- Reports Page               -->
+            <!-- ========================= -->
+
+            <section
+                id="reports-page"
+                class="page-section"
+                aria-labelledby="reports-heading"
+                hidden
+            >
 
                 <div class="page-header">
-                    <h2>Reports</h2>
-                    <p>Generate course and program-level OBE reports.</p>
+
+                    <h2 id="reports-heading">
+                        Reports
+                    </h2>
+
+                    <p>
+                        Generate course and program-level OBE reports.
+                    </p>
+
                 </div>
 
+
                 <div class="content-card">
+
                     <h3>Reports</h3>
-                    <p>This module will be developed later.</p>
+
+                    <p>
+                        This module will be developed later.
+                    </p>
+
                 </div>
 
             </section>
@@ -331,7 +587,7 @@
     </div>
 
 
-    <!-- JavaScript -->
+    <!-- Application JavaScript -->
     <script src="js/app.js"></script>
 
 </body>
