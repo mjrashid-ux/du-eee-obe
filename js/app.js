@@ -1,10 +1,12 @@
-
 // DU EEE OBE System
 // Main application JavaScript
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Page Navigation
+    // ----------------------------------------
+    // Page navigation
+    // ----------------------------------------
+
     const navLinks = document.querySelectorAll(".nav-item");
 
     const pages = {
@@ -17,14 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     navLinks.forEach(function (link) {
-
         link.addEventListener("click", function (event) {
-
             event.preventDefault();
 
             const pageName = this.dataset.page;
             const pageId = pages[pageName];
-
             const selectedPage = document.getElementById(pageId);
 
             if (!selectedPage) {
@@ -33,13 +32,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             Object.values(pages).forEach(function (id) {
-
                 const page = document.getElementById(id);
 
                 if (page) {
                     page.classList.remove("active");
                 }
-
             });
 
             selectedPage.classList.add("active");
@@ -49,44 +46,17 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             this.classList.add("active");
-
         });
-
     });
 
 
-    // Add New Course: Open Form
+    // ----------------------------------------
+    // Course form and table elements
+    // ----------------------------------------
+
     const addCourseButton = document.getElementById("add-course-btn");
     const addCourseForm = document.getElementById("add-course-form");
-
-    if (addCourseButton && addCourseForm) {
-
-        addCourseButton.addEventListener("click", function () {
-
-            addCourseForm.classList.add("active");
-
-            addCourseForm.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        });
-
-    }
-
-
-    // Cancel: Close Form
     const cancelCourseButton = document.querySelector(".cancel-course-btn");
-
-    if (cancelCourseButton && addCourseForm) {
-
-        cancelCourseButton.addEventListener("click", function () {
-
-            addCourseForm.classList.remove("active");
-
-        });
-
-    }
-    // Save Course
     const saveCourseButton = document.getElementById("save-course-btn");
     const courseTableBody = document.getElementById("course-table-body");
 
@@ -97,131 +67,329 @@ document.addEventListener("DOMContentLoaded", function () {
     const courseProgram = document.getElementById("course-program");
     const courseType = document.getElementById("course-type");
 
+    if (
+        !addCourseButton || !addCourseForm || !cancelCourseButton ||
+        !saveCourseButton || !courseTableBody || !courseCode ||
+        !courseTitle || !courseCredits || !contactHours ||
+        !courseProgram || !courseType
+    ) {
+        console.error("Course management could not start: an HTML element is missing.");
+        return;
+    }
+
+    const formHeading = addCourseForm.querySelector("h3");
+
+    // Keep the previous storage key to preserve existing courses.
     const storageKey = "du-eee-obe-courses";
 
-    function addCourseRow(course) {
-        const row = document.createElement("tr");
+    // Tracks whether the prototype has already been added to storage.
+    const migrationKey = "du-eee-obe-prototype-migrated";
 
-        const values = [
-            course.code,
-            course.title,
-            course.credits,
-            course.hours + " hours/week",
-            course.program,
-            course.type,
-            "Active"
-        ];
+    const prototypeCourse = {
+        code: "0533-PHY-1103",
+        title: "Electricity and Magnetism",
+        credits: "1.5",
+        hours: "3",
+        program: "B.Sc. in EEE",
+        type: "Core"
+    };
 
-        values.forEach(function (value) {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
+    let courses = [];
+    let editingIndex = null;
+    let storageAvailable = true;
 
-        courseTableBody.appendChild(row);
-    }
 
-    if (
-        saveCourseButton && courseTableBody && addCourseForm &&
-        courseCode && courseTitle && courseCredits && contactHours &&
-        courseProgram && courseType
-    ) {
-        let courses = [];
-        let storageAvailable = true;
+    // ----------------------------------------
+    // Storage
+    // ----------------------------------------
 
-        try {
-            const savedData = localStorage.getItem(storageKey);
+    function readCourses() {
+        const savedData = localStorage.getItem(storageKey);
 
-            if (savedData) {
-                courses = JSON.parse(savedData);
-
-                if (!Array.isArray(courses)) {
-                    throw new Error("Saved course data is not a list.");
-                }
-
-                courses.forEach(addCourseRow);
-            }
-        } catch (error) {
-            storageAvailable = false;
-            console.error("Could not load saved courses:", error);
-            alert("Saved courses could not be loaded. Saving is disabled.");
+        if (savedData === null) {
+            return [];
         }
 
-        saveCourseButton.addEventListener("click", function () {
-            if (!storageAvailable) {
-                alert("Courses cannot be saved until the storage problem is resolved.");
-                return;
-            }
+        const parsed = JSON.parse(savedData);
 
-            const code = courseCode.value.trim();
-            const title = courseTitle.value.trim();
-            const credits = courseCredits.value.trim();
-            const hours = contactHours.value.trim();
-            const program = courseProgram.value;
-            const type = courseType.value;
+        if (!Array.isArray(parsed)) {
+            throw new Error("Saved course data is not a list.");
+        }
 
-            if (!code || !title || !credits || !hours || !program || !type) {
-                alert("Please complete all course fields.");
-                return;
-            }
-
-            if (
-                !Number.isFinite(Number(credits)) || Number(credits) <= 0 ||
-                !Number.isFinite(Number(hours)) || Number(hours) <= 0
-            ) {
-                alert("Credits and contact hours must be positive numbers.");
-                return;
-            }
-
-            const existingRows = courseTableBody.querySelectorAll("tr");
-            const duplicate = Array.from(existingRows).some(function (row) {
-                const firstCell = row.cells[0];
-
-                return firstCell &&
-                    firstCell.textContent.trim().toLowerCase() === code.toLowerCase();
-            });
-
-            if (duplicate) {
-                alert("A course with this course code already exists.");
-                courseCode.focus();
-                return;
-            }
-
-            const newCourse = {
-                code: code,
-                title: title,
-                credits: credits,
-                hours: hours,
-                program: program,
-                type: type
-            };
-
-            const updatedCourses = courses.concat(newCourse);
-
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(updatedCourses));
-            } catch (error) {
-                console.error("Could not save course:", error);
-                alert("The course could not be saved in this browser.");
-                return;
-            }
-
-            courses = updatedCourses;
-            addCourseRow(newCourse);
-
-            courseCode.value = "";
-            courseTitle.value = "";
-            courseCredits.value = "";
-            contactHours.value = "";
-            courseProgram.selectedIndex = 0;
-            courseType.selectedIndex = 0;
-
-            addCourseForm.classList.remove("active");
-        });
-    } else {
-        console.error("Save Course could not start: a required HTML element is missing.");
+        return parsed;
     }
 
-    console.log("DU EEE OBE System loaded successfully.");
+    function saveCourses(updatedCourses) {
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(updatedCourses));
+            courses = updatedCourses;
+            return true;
+        } catch (error) {
+            console.error("Could not save courses:", error);
+            alert("The change could not be saved in this browser.");
+            return false;
+        }
+    }
 
+    try {
+        courses = readCourses();
+
+        // Add the prototype only once, while preserving existing courses.
+        if (localStorage.getItem(migrationKey) !== "done") {
+            const prototypeExists = courses.some(function (course) {
+                return String(course.code).trim().toLowerCase() ===
+                    prototypeCourse.code.toLowerCase();
+            });
+
+            if (!prototypeExists) {
+                const migratedCourses = [prototypeCourse].concat(courses);
+
+                localStorage.setItem(
+                    storageKey,
+                    JSON.stringify(migratedCourses)
+                );
+
+                courses = migratedCourses;
+            }
+
+            // Once this is set, deleting the prototype won't recreate it.
+            localStorage.setItem(migrationKey, "done");
+        }
+    } catch (error) {
+        storageAvailable = false;
+        console.error("Could not load or migrate courses:", error);
+        alert(
+            "Courses could not be loaded. Changes are disabled to avoid " +
+            "overwriting existing data."
+        );
+    }
+
+
+    // ----------------------------------------
+    // Form helpers
+    // ----------------------------------------
+
+    function resetForm() {
+        courseCode.value = "";
+        courseTitle.value = "";
+        courseCredits.value = "";
+        contactHours.value = "";
+        courseProgram.selectedIndex = 0;
+        courseType.selectedIndex = 0;
+
+        editingIndex = null;
+
+        if (formHeading) {
+            formHeading.textContent = "Add New Course";
+        }
+
+        saveCourseButton.textContent = "Save Course";
+    }
+
+    function openForm() {
+        addCourseForm.classList.add("active");
+
+        addCourseForm.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    addCourseButton.addEventListener("click", function () {
+        if (!storageAvailable) {
+            alert("Course storage is unavailable.");
+            return;
+        }
+
+        resetForm();
+        openForm();
+    });
+
+    cancelCourseButton.addEventListener("click", function () {
+        resetForm();
+        addCourseForm.classList.remove("active");
+    });
+
+
+    // ----------------------------------------
+    // Display courses
+    // ----------------------------------------
+
+    function renderCourses() {
+        courseTableBody.textContent = "";
+
+        courses.forEach(function (course, index) {
+            const row = document.createElement("tr");
+
+            const values = [
+                course.code,
+                course.title,
+                course.credits,
+                course.hours + " hours/week",
+                course.program,
+                course.type,
+                "Active"
+            ];
+
+            values.forEach(function (value) {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const actionsCell = document.createElement("td");
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.textContent = "Edit";
+            editButton.className = "edit-course-btn";
+
+            editButton.addEventListener("click", function () {
+                editCourse(index);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-course-btn";
+
+            deleteButton.addEventListener("click", function () {
+                deleteCourse(index);
+            });
+
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(document.createTextNode(" "));
+            actionsCell.appendChild(deleteButton);
+            row.appendChild(actionsCell);
+
+            courseTableBody.appendChild(row);
+        });
+    }
+
+
+    // ----------------------------------------
+    // Edit and delete
+    // ----------------------------------------
+
+    function editCourse(index) {
+        if (!storageAvailable) {
+            alert("Course storage is unavailable.");
+            return;
+        }
+
+        const course = courses[index];
+
+        courseCode.value = course.code;
+        courseTitle.value = course.title;
+        courseCredits.value = course.credits;
+        contactHours.value = course.hours;
+        courseProgram.value = course.program;
+        courseType.value = course.type;
+
+        editingIndex = index;
+
+        if (formHeading) {
+            formHeading.textContent = "Edit Course";
+        }
+
+        saveCourseButton.textContent = "Update Course";
+        openForm();
+    }
+
+    function deleteCourse(index) {
+        if (!storageAvailable) {
+            alert("Course storage is unavailable.");
+            return;
+        }
+
+        const course = courses[index];
+
+        const confirmed = confirm(
+            "Delete " + course.code + " — " + course.title + "?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const updatedCourses = courses.filter(function (_, courseIndex) {
+            return courseIndex !== index;
+        });
+
+        if (saveCourses(updatedCourses)) {
+            // Closing the form avoids editing an outdated row.
+            resetForm();
+            addCourseForm.classList.remove("active");
+            renderCourses();
+        }
+    }
+
+
+    // ----------------------------------------
+    // Add or update a course
+    // ----------------------------------------
+
+    saveCourseButton.addEventListener("click", function () {
+        if (!storageAvailable) {
+            alert("Course storage is unavailable.");
+            return;
+        }
+
+        const code = courseCode.value.trim();
+        const title = courseTitle.value.trim();
+        const credits = courseCredits.value.trim();
+        const hours = contactHours.value.trim();
+        const program = courseProgram.value;
+        const type = courseType.value;
+
+        if (!code || !title || !credits || !hours || !program || !type) {
+            alert("Please complete all course fields.");
+            return;
+        }
+
+        if (
+            !Number.isFinite(Number(credits)) || Number(credits) <= 0 ||
+            !Number.isFinite(Number(hours)) || Number(hours) <= 0
+        ) {
+            alert("Credits and contact hours must be positive numbers.");
+            return;
+        }
+
+        const duplicate = courses.some(function (course, index) {
+            return index !== editingIndex &&
+                String(course.code).trim().toLowerCase() === code.toLowerCase();
+        });
+
+        if (duplicate) {
+            alert("A course with this course code already exists.");
+            courseCode.focus();
+            return;
+        }
+
+        const updatedCourse = {
+            code: code,
+            title: title,
+            credits: credits,
+            hours: hours,
+            program: program,
+            type: type
+        };
+
+        const updatedCourses = courses.slice();
+
+        if (editingIndex === null) {
+            updatedCourses.push(updatedCourse);
+        } else {
+            updatedCourses[editingIndex] = updatedCourse;
+        }
+
+        if (saveCourses(updatedCourses)) {
+            renderCourses();
+            resetForm();
+            addCourseForm.classList.remove("active");
+        }
+    });
+
+    renderCourses();
+
+    console.log("DU EEE OBE System loaded successfully.");
 });
