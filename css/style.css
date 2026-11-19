@@ -452,3 +452,27 @@ body {
     background: #e5e7eb;
     color: #333;
 }
+/* Course table action buttons */
+
+.edit-course-btn,
+.delete-course-btn {
+    border: none;
+    padding: 7px 12px;
+    border-radius: 5px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.edit-course-btn {
+    background: #0b3d91;
+}
+
+.delete-course-btn {
+    background: #b91c1c;
+}
+
+.edit-course-btn:hover,
+.delete-course-btn:hover {
+    opacity: 0.85;
+}
