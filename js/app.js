@@ -222,7 +222,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Save Course could not start: a required HTML element is missing.");
     }
 
-
     console.log("DU EEE OBE System loaded successfully.");
 
 });
