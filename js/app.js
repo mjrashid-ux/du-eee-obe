@@ -216,6 +216,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderCourses() {
         courseTableBody.textContent = "";
+        const courseCount = document.getElementById("course-count");
+
+    if (courseCount) {
+    courseCount.textContent = storageAvailable ? courses.length : "—";
+    }
 
         courses.forEach(function (course, index) {
             const row = document.createElement("tr");
