@@ -82,3 +82,16 @@ if (addCourseButton && addCourseForm) {
     });
 
 }
+// Cancel: Close Add New Course Form
+
+const cancelCourseButton = document.querySelector(".cancel-course-btn");
+
+if (cancelCourseButton && addCourseForm) {
+
+    cancelCourseButton.addEventListener("click", function () {
+
+        addCourseForm.classList.remove("active");
+
+    });
+
+}
