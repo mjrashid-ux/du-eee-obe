@@ -64,3 +64,21 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("DU EEE OBE System loaded successfully.");
 
 });
+// Add New Course: Open Form
+
+const addCourseButton = document.getElementById("add-course-btn");
+const addCourseForm = document.getElementById("add-course-form");
+
+if (addCourseButton && addCourseForm) {
+
+    addCourseButton.addEventListener("click", function () {
+
+        addCourseForm.classList.add("active");
+
+        addCourseForm.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    });
+
+}
