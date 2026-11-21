@@ -24,6 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const pageName = this.dataset.page;
             const pageId = pages[pageName];
+
+            if (!pageId) {
+                console.log("Page not configured:", pageName);
+                return;
+            }
+
             const selectedPage = document.getElementById(pageId);
 
             if (!selectedPage) {
@@ -73,18 +79,20 @@ document.addEventListener("DOMContentLoaded", function () {
         !courseTitle || !courseCredits || !contactHours ||
         !courseProgram || !courseType
     ) {
-        console.error("Course management could not start: an HTML element is missing.");
+        console.error(
+            "Course management could not start: an HTML element is missing."
+        );
         return;
     }
 
     const formHeading = addCourseForm.querySelector("h3");
 
-    // Keep the previous storage key to preserve existing courses.
+    // Keep these keys unchanged to preserve existing saved courses.
     const storageKey = "du-eee-obe-courses";
-
-    // Tracks whether the prototype has already been added to storage.
     const migrationKey = "du-eee-obe-prototype-migrated";
 
+    // These are initial values only.
+    // They do not overwrite an existing saved prototype course.
     const prototypeCourse = {
         code: "0533-PHY-1103",
         title: "Electricity and Magnetism",
@@ -121,7 +129,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function saveCourses(updatedCourses) {
         try {
-            localStorage.setItem(storageKey, JSON.stringify(updatedCourses));
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(updatedCourses)
+            );
+
             courses = updatedCourses;
             return true;
         } catch (error) {
@@ -134,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
         courses = readCourses();
 
-        // Add the prototype only once, while preserving existing courses.
+        // Add the prototype once without replacing existing saved data.
         if (localStorage.getItem(migrationKey) !== "done") {
             const prototypeExists = courses.some(function (course) {
                 return String(course.code).trim().toLowerCase() ===
@@ -152,16 +164,111 @@ document.addEventListener("DOMContentLoaded", function () {
                 courses = migratedCourses;
             }
 
-            // Once this is set, deleting the prototype won't recreate it.
             localStorage.setItem(migrationKey, "done");
         }
     } catch (error) {
         storageAvailable = false;
+
         console.error("Could not load or migrate courses:", error);
+
         alert(
-            "Courses could not be loaded. Changes are disabled to avoid " +
-            "overwriting existing data."
+            "Courses could not be loaded. Changes are disabled " +
+            "to avoid overwriting existing data."
         );
+    }
+
+
+    // ----------------------------------------
+    // Dashboard updates
+    // ----------------------------------------
+
+    function updateDashboard() {
+        // Update the course count.
+        const courseCount = document.getElementById("course-count");
+
+        if (courseCount) {
+            courseCount.textContent = storageAvailable
+                ? courses.length
+                : "—";
+        }
+
+        // Update the prototype card.
+        const prototypeCard = document.querySelector(".prototype-card");
+
+        if (!prototypeCard) {
+            return;
+        }
+
+        // Supports both the original and the updated card markup.
+        const prototypeInfo = prototypeCard.querySelector(".course-info");
+
+        if (!prototypeInfo) {
+            return;
+        }
+
+        let prototypeMessage = prototypeCard.querySelector(
+            "#prototype-message"
+        );
+
+        if (!prototypeMessage) {
+            prototypeMessage = document.createElement("p");
+            prototypeMessage.id = "prototype-message";
+            prototypeCard.appendChild(prototypeMessage);
+        }
+
+        const prototype = courses.find(function (course) {
+            return String(course.code).trim().toLowerCase() ===
+                prototypeCourse.code.toLowerCase();
+        });
+
+        if (!storageAvailable || !prototype) {
+            // Inline display avoids conflicts with .course-info's grid CSS.
+            prototypeInfo.style.display = "none";
+            prototypeMessage.hidden = false;
+
+            prototypeMessage.textContent = storageAvailable
+                ? "Course not found."
+                : "Course data could not be loaded.";
+
+            return;
+        }
+
+        prototypeInfo.hidden = false;
+        prototypeInfo.style.display = "";
+
+        prototypeMessage.hidden = true;
+        prototypeMessage.textContent = "";
+
+        const originalFields = prototypeInfo.querySelectorAll("strong");
+
+        const fields = [
+            {
+                id: "prototype-code",
+                value: prototype.code
+            },
+            {
+                id: "prototype-title",
+                value: prototype.title
+            },
+            {
+                id: "prototype-credits",
+                value: prototype.credits
+            },
+            {
+                id: "prototype-hours",
+                value: prototype.hours + " hours/week"
+            }
+        ];
+
+        fields.forEach(function (field, index) {
+            const element =
+                prototypeInfo.querySelector("#" + field.id) ||
+                originalFields[index];
+
+            if (element) {
+                element.textContent = field.value;
+            }
+        });
     }
 
 
@@ -174,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
         courseTitle.value = "";
         courseCredits.value = "";
         contactHours.value = "";
+
         courseProgram.selectedIndex = 0;
         courseType.selectedIndex = 0;
 
@@ -216,11 +324,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderCourses() {
         courseTableBody.textContent = "";
-        const courseCount = document.getElementById("course-count");
-
-    if (courseCount) {
-    courseCount.textContent = storageAvailable ? courses.length : "—";
-    }
 
         courses.forEach(function (course, index) {
             const row = document.createElement("tr");
@@ -264,15 +367,18 @@ document.addEventListener("DOMContentLoaded", function () {
             actionsCell.appendChild(editButton);
             actionsCell.appendChild(document.createTextNode(" "));
             actionsCell.appendChild(deleteButton);
-            row.appendChild(actionsCell);
 
+            row.appendChild(actionsCell);
             courseTableBody.appendChild(row);
         });
+
+        // Refresh the dashboard every time the course table changes.
+        updateDashboard();
     }
 
 
     // ----------------------------------------
-    // Edit and delete
+    // Edit a course
     // ----------------------------------------
 
     function editCourse(index) {
@@ -297,8 +403,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         saveCourseButton.textContent = "Update Course";
+
         openForm();
     }
+
+
+    // ----------------------------------------
+    // Delete a course
+    // ----------------------------------------
 
     function deleteCourse(index) {
         if (!storageAvailable) {
@@ -321,7 +433,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (saveCourses(updatedCourses)) {
-            // Closing the form avoids editing an outdated row.
             resetForm();
             addCourseForm.classList.remove("active");
             renderCourses();
@@ -361,7 +472,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const duplicate = courses.some(function (course, index) {
             return index !== editingIndex &&
-                String(course.code).trim().toLowerCase() === code.toLowerCase();
+                String(course.code).trim().toLowerCase() ===
+                code.toLowerCase();
         });
 
         if (duplicate) {
@@ -394,29 +506,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+
+    // ----------------------------------------
+    // Initial display
+    // ----------------------------------------
+
     renderCourses();
-    const prototypeInfo = document.getElementById("prototype-course-info");
-const prototypeMessage = document.getElementById("prototype-message");
 
-const prototype = courses.find(function (course) {
-    return String(course.code).trim().toLowerCase() === "0533-phy-1103";
-});
-
-if (prototypeInfo && prototypeMessage) {
-    prototypeInfo.hidden = !prototype || !storageAvailable;
-    prototypeMessage.hidden = Boolean(prototype) && storageAvailable;
-
-    if (!storageAvailable) {
-        prototypeMessage.textContent = "Course data could not be loaded.";
-    } else if (!prototype) {
-        prototypeMessage.textContent = "Course not found.";
-    } else {
-        document.getElementById("prototype-code").textContent = prototype.code;
-        document.getElementById("prototype-title").textContent = prototype.title;
-        document.getElementById("prototype-credits").textContent = prototype.credits;
-        document.getElementById("prototype-hours").textContent =
-            prototype.hours + " hours/week";
-    }
-}
     console.log("DU EEE OBE System loaded successfully.");
 });
