@@ -505,6 +505,187 @@ document.addEventListener("DOMContentLoaded", function () {
             addCourseForm.classList.remove("active");
         }
     });
+    // ----------------------------------------
+    // Export and import courses
+    // ----------------------------------------
+
+    const exportCoursesButton = document.getElementById("export-courses-btn");
+    const importCoursesButton = document.getElementById("import-courses-btn");
+    const importCoursesFile = document.getElementById("import-courses-file");
+
+    function cleanText(value) {
+        return value === null || value === undefined ? "" : String(value).trim();
+    }
+
+    function validateImportedCourses(data) {
+        // Accepts our backup format or a plain list of courses.
+        const list = Array.isArray(data) ? data : data && data.courses;
+
+        if (!Array.isArray(list)) {
+            throw new Error("The file does not contain a course list.");
+        }
+
+        if (list.length === 0) {
+            throw new Error("The file contains no courses.");
+        }
+
+        const allowedPrograms = Array.from(courseProgram.options).map(function (o) {
+            return o.value;
+        });
+
+        const allowedTypes = Array.from(courseType.options).map(function (o) {
+            return o.value;
+        });
+
+        const seenCodes = new Set();
+
+        return list.map(function (item, i) {
+            const label = "Course " + (i + 1);
+
+            if (!item || typeof item !== "object") {
+                throw new Error(label + " is not valid.");
+            }
+
+            const course = {
+                code: cleanText(item.code),
+                title: cleanText(item.title),
+                credits: cleanText(item.credits),
+                hours: cleanText(item.hours),
+                program: cleanText(item.program),
+                type: cleanText(item.type)
+            };
+
+            if (!course.code || !course.title || !course.credits ||
+                !course.hours || !course.program || !course.type) {
+                throw new Error(label + " has a missing field.");
+            }
+
+            if (!Number.isFinite(Number(course.credits)) || Number(course.credits) <= 0 ||
+                !Number.isFinite(Number(course.hours)) || Number(course.hours) <= 0) {
+                throw new Error(label + " (" + course.code + ") has invalid credits or contact hours.");
+            }
+
+            if (!allowedPrograms.includes(course.program)) {
+                throw new Error(label + " (" + course.code + ") has an unknown program: " + course.program);
+            }
+
+            if (!allowedTypes.includes(course.type)) {
+                throw new Error(label + " (" + course.code + ") has an unknown course type: " + course.type);
+            }
+
+            const codeKey = course.code.toLowerCase();
+
+            if (seenCodes.has(codeKey)) {
+                throw new Error("Duplicate course code in file: " + course.code);
+            }
+
+            seenCodes.add(codeKey);
+            return course;
+        });
+    }
+
+    if (exportCoursesButton) {
+        exportCoursesButton.addEventListener("click", function () {
+            if (!storageAvailable) {
+                alert("Course storage is unavailable.");
+                return;
+            }
+
+            if (courses.length === 0) {
+                alert("There are no courses to export.");
+                return;
+            }
+
+            const backup = {
+                system: "DU EEE OBE System",
+                dataType: "courses",
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                courses: courses
+            };
+
+            const blob = new Blob(
+                [JSON.stringify(backup, null, 2)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            const today = new Date().toISOString().slice(0, 10);
+
+            link.href = url;
+            link.download = "du-eee-obe-courses-" + today + ".json";
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            setTimeout(function () {
+                URL.revokeObjectURL(url);
+            }, 1000);
+        });
+    }
+
+    if (importCoursesButton && importCoursesFile) {
+        importCoursesButton.addEventListener("click", function () {
+            if (!storageAvailable) {
+                alert("Course storage is unavailable.");
+                return;
+            }
+
+            importCoursesFile.click();
+        });
+
+        importCoursesFile.addEventListener("change", function () {
+            const file = importCoursesFile.files[0];
+
+            // Allows choosing the same file again later.
+            importCoursesFile.value = "";
+
+            if (!file) {
+                return;
+            }
+
+            if (file.size > 1024 * 1024) {
+                alert("The file is too large for a course backup.");
+                return;
+            }
+
+            file.text().then(function (text) {
+                let importedCourses;
+
+                try {
+                    importedCourses = validateImportedCourses(JSON.parse(text));
+                } catch (error) {
+                    console.error("Import failed:", error);
+                    alert("Import failed: " + error.message +
+                        "\n\nYour current courses have not been changed.");
+                    return;
+                }
+
+                const confirmed = confirm(
+                    "Replace your current " + courses.length + " course(s) with " +
+                    importedCourses.length + " course(s) from \"" + file.name + "\"?" +
+                    "\n\nTip: Export your current courses first if you may need them."
+                );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                if (saveCourses(importedCourses)) {
+                    resetForm();
+                    addCourseForm.classList.remove("active");
+                    renderCourses();
+                    alert(importedCourses.length + " course(s) imported successfully.");
+                }
+            }).catch(function (error) {
+                console.error("Could not read file:", error);
+                alert("The file could not be read.");
+            });
+        });
+    }
+
 
 
     // ----------------------------------------
