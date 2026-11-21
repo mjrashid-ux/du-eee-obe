@@ -395,6 +395,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     renderCourses();
+    const prototypeInfo = document.getElementById("prototype-course-info");
+const prototypeMessage = document.getElementById("prototype-message");
 
+const prototype = courses.find(function (course) {
+    return String(course.code).trim().toLowerCase() === "0533-phy-1103";
+});
+
+if (prototypeInfo && prototypeMessage) {
+    prototypeInfo.hidden = !prototype || !storageAvailable;
+    prototypeMessage.hidden = Boolean(prototype) && storageAvailable;
+
+    if (!storageAvailable) {
+        prototypeMessage.textContent = "Course data could not be loaded.";
+    } else if (!prototype) {
+        prototypeMessage.textContent = "Course not found.";
+    } else {
+        document.getElementById("prototype-code").textContent = prototype.code;
+        document.getElementById("prototype-title").textContent = prototype.title;
+        document.getElementById("prototype-credits").textContent = prototype.credits;
+        document.getElementById("prototype-hours").textContent =
+            prototype.hours + " hours/week";
+    }
+}
     console.log("DU EEE OBE System loaded successfully.");
 });
