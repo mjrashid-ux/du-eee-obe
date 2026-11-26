@@ -594,3 +594,127 @@ button:hover {
     }
 
 }
+
+/* =========================================
+   Font Size Enhancement
+   ========================================= */
+
+/* General text */
+body {
+    font-size: 16px;
+}
+
+/* Header */
+.topbar h1 {
+    font-size: 26px;
+}
+
+.topbar p {
+    font-size: 15px;
+}
+
+.university {
+    font-size: 16px;
+}
+
+/* Sidebar navigation */
+.nav-item {
+    font-size: 16px;
+}
+
+/* Page headings */
+.page-header h2 {
+    font-size: 29px;
+}
+
+.page-header p {
+    font-size: 16px;
+}
+
+/* Content cards */
+.content-card h3,
+.prototype-card h3 {
+    font-size: 21px;
+}
+
+.content-card > p,
+.content-card-header p {
+    font-size: 16px;
+}
+
+/* Dashboard */
+.welcome-card h2 {
+    font-size: 23px;
+}
+
+.welcome-card p {
+    font-size: 16px;
+}
+
+.summary-card h3 {
+    font-size: 16px;
+}
+
+.summary-card .number {
+    font-size: 36px;
+}
+
+.summary-card p {
+    font-size: 14px;
+}
+
+/* Course information */
+.course-info span {
+    font-size: 14px;
+}
+
+.course-info strong {
+    font-size: 16px;
+}
+
+/* Forms */
+.form-group label {
+    font-size: 15px;
+}
+
+.form-group input,
+.form-group select {
+    font-size: 16px;
+}
+
+.form-container h4 {
+    font-size: 19px;
+}
+
+/* Buttons */
+button,
+.add-course-btn,
+#add-program-btn,
+.save-course-btn,
+#save-program-btn {
+    font-size: 15px;
+}
+
+/* Tables */
+.course-table,
+.table-container table {
+    font-size: 15px;
+}
+
+.course-table th,
+.course-table td,
+.table-container th,
+.table-container td {
+    padding: 15px 16px;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+    .page-header h2 {
+        font-size: 25px;
+    }
+
+    .topbar h1 {
+        font-size: 21px;
+    }
+}
