@@ -849,7 +849,7 @@ renderCourseProgramOptions();
             if (savePrograms()) {
 
                 renderPrograms();
-
+        renderCourseProgramOptions();
                 programForm.reset();
 
                 programFormContainer.style.display = "none";
@@ -903,6 +903,7 @@ renderCourseProgramOptions();
             if (savePrograms()) {
 
                 renderPrograms();
+                renderCourseProgramOptions();
 
             } else {
 
@@ -1344,7 +1345,7 @@ renderCourseProgramOptions();
     // ----------------------------------------
 
     renderCourses();
-
+renderCourseProgramOptions();
     console.log("DU EEE OBE System loaded successfully.");
 
 });
