@@ -266,100 +266,104 @@
                 </section>
 
             </section>
-            <!-- OBE Setup Page -->
-            <section id="obe-setup-page" class="page-section">
+            
+<!-- OBE Setup Page -->
+<section id="obe-setup-page" class="page-section">
 
-                <div class="page-header">
-                    <h2>OBE Setup</h2>
-                    <p>
-                        Configure the academic program and
-                        Outcome-Based Education framework.
-                    </p>
+    <div class="page-header">
+        <h2>OBE Setup</h2>
+        <p>
+            Configure the academic program and
+            Outcome-Based Education framework.
+        </p>
+    </div>
+
+    <section class="content-card">
+
+        <h3>Program Management</h3>
+
+        <p>
+            Manage academic programs offered by
+            the Department of EEE.
+        </p>
+
+        <button type="button" id="add-program-btn">
+            + Add New Program
+        </button>
+
+        <div id="program-form-container" class="form-container"
+             style="display: none;">
+
+            <h4 id="program-form-title">Add New Program</h4>
+
+            <form id="program-form">
+
+                <div class="form-group">
+                    <label for="program-code">Program Code</label>
+                    <input type="text" id="program-code"
+                           placeholder="e.g. BSC-EEE" required>
                 </div>
 
-               
-<section class="content-card">
+                <div class="form-group">
+                    <label for="program-name">Program Name</label>
+                    <input type="text" id="program-name"
+                           placeholder="e.g. B.Sc. in EEE" required>
+                </div>
 
-    <h3>Program Management</h3>
+                <div class="form-group">
+                    <label for="program-department">Department</label>
+                    <input type="text" id="program-department"
+                           value="Electrical and Electronic Engineering" required>
+                </div>
 
-    <p>
-        Manage academic programs offered by
-        the Department of EEE.
-    </p>
+                <div class="form-group">
+                    <label for="program-university">University</label>
+                    <input type="text" id="program-university"
+                           value="University of Dhaka" required>
+                </div>
 
-    <button type="button" id="add-program-btn">
-        + Add New Program
-    </button>
-    
-<div id="program-form-container" class="form-container" style="display: none;">
+                <div class="form-group">
+                    <label for="program-status">Status</label>
+                    <select id="program-status" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
 
-    <h4 id="program-form-title">Add New Program</h4>
+                <button type="submit" id="save-program-btn">
+                    Save Program
+                </button>
 
-    <form id="program-form">
+                <button type="button" id="cancel-program-btn">
+                    Cancel
+                </button>
 
-        <div class="form-group">
-            <label for="program-code">Program Code</label>
-            <input type="text" id="program-code"
-                   placeholder="e.g. BSC-EEE" required>
+            </form>
+
         </div>
 
-        <div class="form-group">
-            <label for="program-name">Program Name</label>
-            <input type="text" id="program-name"
-                   placeholder="e.g. B.Sc. in EEE" required>
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Program Code</th>
+                        <th>Program Name</th>
+                        <th>Department</th>
+                        <th>University</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="program-table-body">
+                    <!-- Program records will appear here -->
+                </tbody>
+            </table>
+
         </div>
 
-        <div class="form-group">
-            <label for="program-department">Department</label>
-            <input type="text" id="program-department"
-                   value="Electrical and Electronic Engineering" required>
-        </div>
-
-        <div class="form-group">
-            <label for="program-university">University</label>
-            <input type="text" id="program-university"
-                   value="University of Dhaka" required>
-        </div>
-
-        <div class="form-group">
-            <label for="program-status">Status</label>
-            <select id="program-status" required>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-            </select>
-        </div>
-
-        <button type="submit" id="save-program-btn">
-            Save Program
-        </button>
-
-        <button type="button" id="cancel-program-btn">
-            Cancel
-        </button>
-
-    </form>
-
-</div>
-
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Program Code</th>
-                    <th>Program Name</th>
-                    <th>Department</th>
-                    <th>University</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-
-            <tbody id="program-table-body">
-                <!-- Program records will appear here -->
-            </tbody>
-        </table>
-    </div>
+    </section>
 
 </section>
 
