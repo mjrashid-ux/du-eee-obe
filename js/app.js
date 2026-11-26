@@ -435,6 +435,122 @@ document.addEventListener("DOMContentLoaded", function () {
         if (saveCourses(updatedCourses)) {
             resetForm();
             addCourseForm.classList.remove("active");
+            
+// ----------------------------------------
+// Program Management
+// ----------------------------------------
+
+const programTableBody = document.getElementById("program-table-body");
+const addProgramBtn = document.getElementById("add-program-btn");
+const programFormContainer = document.getElementById("program-form-container");
+const programForm = document.getElementById("program-form");
+const cancelProgramBtn = document.getElementById("cancel-program-btn");
+
+const programCodeInput = document.getElementById("program-code");
+const programNameInput = document.getElementById("program-name");
+const programDepartmentInput = document.getElementById("program-department");
+const programUniversityInput = document.getElementById("program-university");
+const programStatusInput = document.getElementById("program-status");
+
+let programs = JSON.parse(localStorage.getItem("du-eee-obe-programs")) || [
+    {
+        code: "BSC-EEE",
+        name: "B.Sc. in EEE",
+        department: "Electrical and Electronic Engineering",
+        university: "University of Dhaka",
+        status: "Active"
+    }
+];
+
+function savePrograms() {
+    localStorage.setItem("du-eee-obe-programs", JSON.stringify(programs));
+}
+
+function renderPrograms() {
+
+    programTableBody.innerHTML = "";
+
+    programs.forEach((program, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${program.code}</td>
+            <td>${program.name}</td>
+            <td>${program.department}</td>
+            <td>${program.university}</td>
+            <td>${program.status}</td>
+            <td>
+                <button type="button" class="delete-program-btn"
+                    data-index="${index}">Delete</button>
+            </td>
+        `;
+
+        programTableBody.appendChild(row);
+    });
+}
+
+addProgramBtn.addEventListener("click", function () {
+    programForm.reset();
+    programDepartmentInput.value = "Electrical and Electronic Engineering";
+    programUniversityInput.value = "University of Dhaka";
+    programFormContainer.style.display = "block";
+});
+
+cancelProgramBtn.addEventListener("click", function () {
+    programForm.reset();
+    programFormContainer.style.display = "none";
+});
+
+programForm.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    const newProgram = {
+        code: programCodeInput.value.trim().toUpperCase(),
+        name: programNameInput.value.trim(),
+        department: programDepartmentInput.value.trim(),
+        university: programUniversityInput.value.trim(),
+        status: programStatusInput.value
+    };
+
+    const duplicate = programs.some(
+        program => program.code.toUpperCase() === newProgram.code
+    );
+
+    if (duplicate) {
+        alert("A program with this code already exists.");
+        return;
+    }
+
+    programs.push(newProgram);
+
+    savePrograms();
+    renderPrograms();
+
+    programForm.reset();
+    programFormContainer.style.display = "none";
+
+    alert("Program saved successfully.");
+});
+
+programTableBody.addEventListener("click", function (event) {
+
+    if (event.target.classList.contains("delete-program-btn")) {
+
+        const index = Number(event.target.dataset.index);
+
+        if (confirm("Are you sure you want to delete this program?")) {
+            programs.splice(index, 1);
+            savePrograms();
+            renderPrograms();
+        }
+    }
+});
+
+savePrograms();
+renderPrograms();
+
             renderCourses();
         }
     }
