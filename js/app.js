@@ -685,6 +685,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // Update Course Master program dropdown
+    function renderCourseProgramOptions(selectedProgram = "") {
+
+        courseProgram.innerHTML = "";
+
+        const activePrograms = programs.filter(function (program) {
+            return program.status === "Active";
+        });
+
+        activePrograms.forEach(function (program) {
+
+            const option = document.createElement("option");
+
+            option.value = program.name;
+            option.textContent = program.name;
+
+            courseProgram.appendChild(option);
+
+        });
+
+        // Preserve an existing course's program when editing,
+        // even if that program is now inactive or deleted.
+        if (
+            selectedProgram &&
+            !activePrograms.some(function (program) {
+                return program.name === selectedProgram;
+            })
+        ) {
+
+            const oldOption = document.createElement("option");
+
+            oldOption.value = selectedProgram;
+            oldOption.textContent = selectedProgram +
+                " (Inactive or deleted)";
+
+            courseProgram.appendChild(oldOption);
+
+        }
+
+        if (selectedProgram) {
+            courseProgram.value = selectedProgram;
+        }
+
+    }
+
     // ----------------------------------------
     // 9.4 Open the program form
     // ----------------------------------------
