@@ -1,10 +1,11 @@
+
 // DU EEE OBE System
 // Main application JavaScript
 
 document.addEventListener("DOMContentLoaded", function () {
 
     // ----------------------------------------
-    // Page navigation
+    // 1. Page navigation
     // ----------------------------------------
 
     const navLinks = document.querySelectorAll(".nav-item");
@@ -19,7 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     navLinks.forEach(function (link) {
+
         link.addEventListener("click", function (event) {
+
             event.preventDefault();
 
             const pageName = this.dataset.page;
@@ -38,11 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             Object.values(pages).forEach(function (id) {
+
                 const page = document.getElementById(id);
 
                 if (page) {
                     page.classList.remove("active");
                 }
+
             });
 
             selectedPage.classList.add("active");
@@ -52,12 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             this.classList.add("active");
+
         });
+
     });
 
 
     // ----------------------------------------
-    // Course form and table elements
+    // 2. Course form and table elements
     // ----------------------------------------
 
     const addCourseButton = document.getElementById("add-course-btn");
@@ -79,20 +86,19 @@ document.addEventListener("DOMContentLoaded", function () {
         !courseTitle || !courseCredits || !contactHours ||
         !courseProgram || !courseType
     ) {
+
         console.error(
             "Course management could not start: an HTML element is missing."
         );
+
         return;
     }
 
     const formHeading = addCourseForm.querySelector("h3");
 
-    // Keep these keys unchanged to preserve existing saved courses.
     const storageKey = "du-eee-obe-courses";
     const migrationKey = "du-eee-obe-prototype-migrated";
 
-    // These are initial values only.
-    // They do not overwrite an existing saved prototype course.
     const prototypeCourse = {
         code: "0533-PHY-1103",
         title: "Electricity and Magnetism",
@@ -108,10 +114,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ----------------------------------------
-    // Storage
+    // 3. Course storage
     // ----------------------------------------
 
     function readCourses() {
+
         const savedData = localStorage.getItem(storageKey);
 
         if (savedData === null) {
@@ -125,35 +132,51 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return parsed;
+
     }
 
+
     function saveCourses(updatedCourses) {
+
         try {
+
             localStorage.setItem(
                 storageKey,
                 JSON.stringify(updatedCourses)
             );
 
             courses = updatedCourses;
+
             return true;
+
         } catch (error) {
+
             console.error("Could not save courses:", error);
+
             alert("The change could not be saved in this browser.");
+
             return false;
+
         }
+
     }
 
+
     try {
+
         courses = readCourses();
 
-        // Add the prototype once without replacing existing saved data.
         if (localStorage.getItem(migrationKey) !== "done") {
+
             const prototypeExists = courses.some(function (course) {
+
                 return String(course.code).trim().toLowerCase() ===
                     prototypeCourse.code.toLowerCase();
+
             });
 
             if (!prototypeExists) {
+
                 const migratedCourses = [prototypeCourse].concat(courses);
 
                 localStorage.setItem(
@@ -162,11 +185,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 courses = migratedCourses;
+
             }
 
             localStorage.setItem(migrationKey, "done");
+
         }
+
     } catch (error) {
+
         storageAvailable = false;
 
         console.error("Could not load or migrate courses:", error);
@@ -175,31 +202,32 @@ document.addEventListener("DOMContentLoaded", function () {
             "Courses could not be loaded. Changes are disabled " +
             "to avoid overwriting existing data."
         );
+
     }
 
 
     // ----------------------------------------
-    // Dashboard updates
+    // 4. Dashboard updates
     // ----------------------------------------
 
     function updateDashboard() {
-        // Update the course count.
+
         const courseCount = document.getElementById("course-count");
 
         if (courseCount) {
+
             courseCount.textContent = storageAvailable
                 ? courses.length
                 : "—";
+
         }
 
-        // Update the prototype card.
         const prototypeCard = document.querySelector(".prototype-card");
 
         if (!prototypeCard) {
             return;
         }
 
-        // Supports both the original and the updated card markup.
         const prototypeInfo = prototypeCard.querySelector(".course-info");
 
         if (!prototypeInfo) {
@@ -211,18 +239,23 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
         if (!prototypeMessage) {
+
             prototypeMessage = document.createElement("p");
             prototypeMessage.id = "prototype-message";
+
             prototypeCard.appendChild(prototypeMessage);
+
         }
 
         const prototype = courses.find(function (course) {
+
             return String(course.code).trim().toLowerCase() ===
                 prototypeCourse.code.toLowerCase();
+
         });
 
         if (!storageAvailable || !prototype) {
-            // Inline display avoids conflicts with .course-info's grid CSS.
+
             prototypeInfo.style.display = "none";
             prototypeMessage.hidden = false;
 
@@ -231,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 : "Course data could not be loaded.";
 
             return;
+
         }
 
         prototypeInfo.hidden = false;
@@ -261,6 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
 
         fields.forEach(function (field, index) {
+
             const element =
                 prototypeInfo.querySelector("#" + field.id) ||
                 originalFields[index];
@@ -268,15 +303,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (element) {
                 element.textContent = field.value;
             }
+
         });
+
     }
 
 
     // ----------------------------------------
-    // Form helpers
+    // 5. Course form helpers
     // ----------------------------------------
 
     function resetForm() {
+
         courseCode.value = "";
         courseTitle.value = "";
         courseCredits.value = "";
@@ -292,17 +330,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         saveCourseButton.textContent = "Save Course";
+
     }
 
+
     function openForm() {
+
         addCourseForm.classList.add("active");
 
         addCourseForm.scrollIntoView({
             behavior: "smooth"
         });
+
     }
 
+
     addCourseButton.addEventListener("click", function () {
+
         if (!storageAvailable) {
             alert("Course storage is unavailable.");
             return;
@@ -310,22 +354,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
         resetForm();
         openForm();
+
     });
 
+
     cancelCourseButton.addEventListener("click", function () {
+
         resetForm();
+
         addCourseForm.classList.remove("active");
+
     });
 
 
     // ----------------------------------------
-    // Display courses
+    // 6. Display courses
     // ----------------------------------------
 
     function renderCourses() {
+
         courseTableBody.textContent = "";
 
         courses.forEach(function (course, index) {
+
             const row = document.createElement("tr");
 
             const values = [
@@ -339,14 +390,19 @@ document.addEventListener("DOMContentLoaded", function () {
             ];
 
             values.forEach(function (value) {
+
                 const cell = document.createElement("td");
+
                 cell.textContent = value;
+
                 row.appendChild(cell);
+
             });
 
             const actionsCell = document.createElement("td");
 
             const editButton = document.createElement("button");
+
             editButton.type = "button";
             editButton.textContent = "Edit";
             editButton.className = "edit-course-btn";
@@ -355,7 +411,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 editCourse(index);
             });
 
+
             const deleteButton = document.createElement("button");
+
             deleteButton.type = "button";
             deleteButton.textContent = "Delete";
             deleteButton.className = "delete-course-btn";
@@ -364,24 +422,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 deleteCourse(index);
             });
 
+
             actionsCell.appendChild(editButton);
             actionsCell.appendChild(document.createTextNode(" "));
             actionsCell.appendChild(deleteButton);
 
             row.appendChild(actionsCell);
+
             courseTableBody.appendChild(row);
+
         });
 
-        // Refresh the dashboard every time the course table changes.
         updateDashboard();
+
     }
 
 
     // ----------------------------------------
-    // Edit a course
+    // 7. Edit a course
     // ----------------------------------------
 
     function editCourse(index) {
+
         if (!storageAvailable) {
             alert("Course storage is unavailable.");
             return;
@@ -393,6 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
         courseTitle.value = course.title;
         courseCredits.value = course.credits;
         contactHours.value = course.hours;
+
         courseProgram.value = course.program;
         courseType.value = course.type;
 
@@ -405,14 +468,16 @@ document.addEventListener("DOMContentLoaded", function () {
         saveCourseButton.textContent = "Update Course";
 
         openForm();
+
     }
 
 
     // ----------------------------------------
-    // Delete a course
+    // 8. Delete a course
     // ----------------------------------------
 
     function deleteCourse(index) {
+
         if (!storageAvailable) {
             alert("Course storage is unavailable.");
             return;
@@ -433,134 +498,395 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (saveCourses(updatedCourses)) {
+
             resetForm();
+
             addCourseForm.classList.remove("active");
-            
-// ----------------------------------------
-// Program Management
-// ----------------------------------------
 
-const programTableBody = document.getElementById("program-table-body");
-const addProgramBtn = document.getElementById("add-program-btn");
-const programFormContainer = document.getElementById("program-form-container");
-const programForm = document.getElementById("program-form");
-const cancelProgramBtn = document.getElementById("cancel-program-btn");
+            renderCourses();
 
-const programCodeInput = document.getElementById("program-code");
-const programNameInput = document.getElementById("program-name");
-const programDepartmentInput = document.getElementById("program-department");
-const programUniversityInput = document.getElementById("program-university");
-const programStatusInput = document.getElementById("program-status");
+        }
 
-let programs = JSON.parse(localStorage.getItem("du-eee-obe-programs")) || [
-    {
+    }
+
+
+    // ----------------------------------------
+    // 9. Program Management
+    // ----------------------------------------
+
+    const programTableBody = document.getElementById("program-table-body");
+
+    const addProgramBtn = document.getElementById("add-program-btn");
+
+    const programFormContainer = document.getElementById(
+        "program-form-container"
+    );
+
+    const programForm = document.getElementById("program-form");
+
+    const cancelProgramBtn = document.getElementById("cancel-program-btn");
+
+    const programCodeInput = document.getElementById("program-code");
+    const programNameInput = document.getElementById("program-name");
+
+    const programDepartmentInput = document.getElementById(
+        "program-department"
+    );
+
+    const programUniversityInput = document.getElementById(
+        "program-university"
+    );
+
+    const programStatusInput = document.getElementById("program-status");
+
+
+    const programStorageKey = "du-eee-obe-programs";
+
+    let programs = [];
+
+    let programStorageAvailable = true;
+
+
+    // ----------------------------------------
+    // 9.1 Load saved programs
+    // ----------------------------------------
+
+    const defaultProgram = {
         code: "BSC-EEE",
         name: "B.Sc. in EEE",
         department: "Electrical and Electronic Engineering",
         university: "University of Dhaka",
         status: "Active"
-    }
-];
-
-function savePrograms() {
-    localStorage.setItem("du-eee-obe-programs", JSON.stringify(programs));
-}
-
-function renderPrograms() {
-
-    programTableBody.innerHTML = "";
-
-    programs.forEach((program, index) => {
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${program.code}</td>
-            <td>${program.name}</td>
-            <td>${program.department}</td>
-            <td>${program.university}</td>
-            <td>${program.status}</td>
-            <td>
-                <button type="button" class="delete-program-btn"
-                    data-index="${index}">Delete</button>
-            </td>
-        `;
-
-        programTableBody.appendChild(row);
-    });
-}
-
-addProgramBtn.addEventListener("click", function () {
-    programForm.reset();
-    programDepartmentInput.value = "Electrical and Electronic Engineering";
-    programUniversityInput.value = "University of Dhaka";
-    programFormContainer.style.display = "block";
-});
-
-cancelProgramBtn.addEventListener("click", function () {
-    programForm.reset();
-    programFormContainer.style.display = "none";
-});
-
-programForm.addEventListener("submit", function (event) {
-
-    event.preventDefault();
-
-    const newProgram = {
-        code: programCodeInput.value.trim().toUpperCase(),
-        name: programNameInput.value.trim(),
-        department: programDepartmentInput.value.trim(),
-        university: programUniversityInput.value.trim(),
-        status: programStatusInput.value
     };
 
-    const duplicate = programs.some(
-        program => program.code.toUpperCase() === newProgram.code
-    );
 
-    if (duplicate) {
-        alert("A program with this code already exists.");
-        return;
-    }
+    try {
 
-    programs.push(newProgram);
+        const savedPrograms = localStorage.getItem(programStorageKey);
 
-    savePrograms();
-    renderPrograms();
+        if (savedPrograms === null) {
 
-    programForm.reset();
-    programFormContainer.style.display = "none";
+            programs = [defaultProgram];
 
-    alert("Program saved successfully.");
-});
+            localStorage.setItem(
+                programStorageKey,
+                JSON.stringify(programs)
+            );
 
-programTableBody.addEventListener("click", function (event) {
+        } else {
 
-    if (event.target.classList.contains("delete-program-btn")) {
+            programs = JSON.parse(savedPrograms);
 
-        const index = Number(event.target.dataset.index);
+            if (!Array.isArray(programs)) {
+                throw new Error("Saved program data is not a list.");
+            }
 
-        if (confirm("Are you sure you want to delete this program?")) {
-            programs.splice(index, 1);
-            savePrograms();
-            renderPrograms();
         }
-    }
-});
 
-savePrograms();
-renderPrograms();
+    } catch (error) {
 
-            renderCourses();
-        }
+        programStorageAvailable = false;
+
+        console.error("Could not load programs:", error);
+
+        alert(
+            "Program data could not be loaded. " +
+            "Program changes are disabled to protect existing data."
+        );
+
     }
 
 
     // ----------------------------------------
-    // Add or update a course
+    // 9.2 Save programs
+    // ----------------------------------------
+
+    function savePrograms() {
+
+        if (!programStorageAvailable) {
+            return false;
+        }
+
+        try {
+
+            localStorage.setItem(
+                programStorageKey,
+                JSON.stringify(programs)
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Could not save programs:", error);
+
+            alert("The program could not be saved in this browser.");
+
+            return false;
+
+        }
+
+    }
+
+
+    // ----------------------------------------
+    // 9.3 Display programs
+    // ----------------------------------------
+
+    function renderPrograms() {
+
+        if (!programTableBody) {
+            return;
+        }
+
+        programTableBody.textContent = "";
+
+        programs.forEach(function (program, index) {
+
+            const row = document.createElement("tr");
+
+            const values = [
+                program.code,
+                program.name,
+                program.department,
+                program.university,
+                program.status
+            ];
+
+            values.forEach(function (value) {
+
+                const cell = document.createElement("td");
+
+                cell.textContent = value;
+
+                row.appendChild(cell);
+
+            });
+
+
+            const actionsCell = document.createElement("td");
+
+            const deleteButton = document.createElement("button");
+
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-program-btn";
+
+            deleteButton.dataset.index = index;
+
+            actionsCell.appendChild(deleteButton);
+
+            row.appendChild(actionsCell);
+
+            programTableBody.appendChild(row);
+
+        });
+
+    }
+
+
+    // ----------------------------------------
+    // 9.4 Open the program form
+    // ----------------------------------------
+
+    if (
+        programTableBody &&
+        addProgramBtn &&
+        programFormContainer &&
+        programForm &&
+        cancelProgramBtn &&
+        programCodeInput &&
+        programNameInput &&
+        programDepartmentInput &&
+        programUniversityInput &&
+        programStatusInput
+    ) {
+
+        addProgramBtn.addEventListener("click", function () {
+
+            if (!programStorageAvailable) {
+                alert("Program storage is unavailable.");
+                return;
+            }
+
+            programForm.reset();
+
+            programDepartmentInput.value =
+                "Electrical and Electronic Engineering";
+
+            programUniversityInput.value =
+                "University of Dhaka";
+
+            programFormContainer.style.display = "block";
+
+            programFormContainer.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        });
+
+
+        // ----------------------------------------
+        // 9.5 Cancel program form
+        // ----------------------------------------
+
+        cancelProgramBtn.addEventListener("click", function () {
+
+            programForm.reset();
+
+            programFormContainer.style.display = "none";
+
+        });
+
+
+        // ----------------------------------------
+        // 9.6 Save a new program
+        // ----------------------------------------
+
+        programForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            if (!programStorageAvailable) {
+                alert("Program storage is unavailable.");
+                return;
+            }
+
+            const newProgram = {
+
+                code: programCodeInput.value.trim().toUpperCase(),
+
+                name: programNameInput.value.trim(),
+
+                department: programDepartmentInput.value.trim(),
+
+                university: programUniversityInput.value.trim(),
+
+                status: programStatusInput.value
+
+            };
+
+
+            if (
+                !newProgram.code ||
+                !newProgram.name ||
+                !newProgram.department ||
+                !newProgram.university
+            ) {
+
+                alert("Please complete all program fields.");
+
+                return;
+
+            }
+
+
+            const duplicate = programs.some(function (program) {
+
+                return String(program.code).trim().toUpperCase() ===
+                    newProgram.code;
+
+            });
+
+
+            if (duplicate) {
+
+                alert("A program with this code already exists.");
+
+                programCodeInput.focus();
+
+                return;
+
+            }
+
+
+            programs.push(newProgram);
+
+            if (savePrograms()) {
+
+                renderPrograms();
+
+                programForm.reset();
+
+                programFormContainer.style.display = "none";
+
+                alert("Program saved successfully.");
+
+            } else {
+
+                programs.pop();
+
+            }
+
+        });
+
+
+        // ----------------------------------------
+        // 9.7 Delete a program
+        // ----------------------------------------
+
+        programTableBody.addEventListener("click", function (event) {
+
+            if (!event.target.classList.contains("delete-program-btn")) {
+                return;
+            }
+
+            if (!programStorageAvailable) {
+                alert("Program storage is unavailable.");
+                return;
+            }
+
+            const index = Number(event.target.dataset.index);
+
+            if (!Number.isInteger(index) || index < 0 ||
+                index >= programs.length) {
+                return;
+            }
+
+            const program = programs[index];
+
+            const confirmed = confirm(
+                "Are you sure you want to delete " +
+                program.code + " — " + program.name + "?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const deletedProgram = programs.splice(index, 1)[0];
+
+            if (savePrograms()) {
+
+                renderPrograms();
+
+            } else {
+
+                programs.splice(index, 0, deletedProgram);
+
+            }
+
+        });
+
+
+        // Display saved programs when the application opens.
+        renderPrograms();
+
+    } else {
+
+        console.warn(
+            "Program Management could not start: an HTML element is missing."
+        );
+
+    }
+
+
+    // ----------------------------------------
+    // 10. Add or update a course
     // ----------------------------------------
 
     saveCourseButton.addEventListener("click", function () {
+
         if (!storageAvailable) {
             alert("Course storage is unavailable.");
             return;
@@ -570,72 +896,121 @@ renderPrograms();
         const title = courseTitle.value.trim();
         const credits = courseCredits.value.trim();
         const hours = contactHours.value.trim();
+
         const program = courseProgram.value;
         const type = courseType.value;
 
+
         if (!code || !title || !credits || !hours || !program || !type) {
+
             alert("Please complete all course fields.");
+
             return;
+
         }
+
 
         if (
             !Number.isFinite(Number(credits)) || Number(credits) <= 0 ||
             !Number.isFinite(Number(hours)) || Number(hours) <= 0
         ) {
+
             alert("Credits and contact hours must be positive numbers.");
+
             return;
+
         }
 
+
         const duplicate = courses.some(function (course, index) {
+
             return index !== editingIndex &&
                 String(course.code).trim().toLowerCase() ===
                 code.toLowerCase();
+
         });
 
+
         if (duplicate) {
+
             alert("A course with this course code already exists.");
+
             courseCode.focus();
+
             return;
+
         }
 
+
         const updatedCourse = {
+
             code: code,
             title: title,
             credits: credits,
             hours: hours,
             program: program,
             type: type
+
         };
+
 
         const updatedCourses = courses.slice();
 
         if (editingIndex === null) {
+
             updatedCourses.push(updatedCourse);
+
         } else {
+
             updatedCourses[editingIndex] = updatedCourse;
+
         }
+
 
         if (saveCourses(updatedCourses)) {
+
             renderCourses();
+
             resetForm();
+
             addCourseForm.classList.remove("active");
+
         }
+
     });
+
+
     // ----------------------------------------
-    // Export and import courses
+    // 11. Export and import courses
     // ----------------------------------------
 
-    const exportCoursesButton = document.getElementById("export-courses-btn");
-    const importCoursesButton = document.getElementById("import-courses-btn");
-    const importCoursesFile = document.getElementById("import-courses-file");
+    const exportCoursesButton = document.getElementById(
+        "export-courses-btn"
+    );
+
+    const importCoursesButton = document.getElementById(
+        "import-courses-btn"
+    );
+
+    const importCoursesFile = document.getElementById(
+        "import-courses-file"
+    );
+
 
     function cleanText(value) {
-        return value === null || value === undefined ? "" : String(value).trim();
+
+        return value === null || value === undefined
+            ? ""
+            : String(value).trim();
+
     }
 
+
     function validateImportedCourses(data) {
-        // Accepts our backup format or a plain list of courses.
-        const list = Array.isArray(data) ? data : data && data.courses;
+
+        const list = Array.isArray(data)
+            ? data
+            : data && data.courses;
 
         if (!Array.isArray(list)) {
             throw new Error("The file does not contain a course list.");
@@ -645,63 +1020,117 @@ renderPrograms();
             throw new Error("The file contains no courses.");
         }
 
-        const allowedPrograms = Array.from(courseProgram.options).map(function (o) {
-            return o.value;
-        });
 
-        const allowedTypes = Array.from(courseType.options).map(function (o) {
-            return o.value;
-        });
+        const allowedPrograms = Array.from(courseProgram.options).map(
+            function (option) {
+                return option.value;
+            }
+        );
+
+
+        const allowedTypes = Array.from(courseType.options).map(
+            function (option) {
+                return option.value;
+            }
+        );
+
 
         const seenCodes = new Set();
 
+
         return list.map(function (item, i) {
+
             const label = "Course " + (i + 1);
 
             if (!item || typeof item !== "object") {
                 throw new Error(label + " is not valid.");
             }
 
+
             const course = {
+
                 code: cleanText(item.code),
                 title: cleanText(item.title),
                 credits: cleanText(item.credits),
                 hours: cleanText(item.hours),
                 program: cleanText(item.program),
                 type: cleanText(item.type)
+
             };
 
-            if (!course.code || !course.title || !course.credits ||
-                !course.hours || !course.program || !course.type) {
+
+            if (
+                !course.code || !course.title || !course.credits ||
+                !course.hours || !course.program || !course.type
+            ) {
+
                 throw new Error(label + " has a missing field.");
+
             }
 
-            if (!Number.isFinite(Number(course.credits)) || Number(course.credits) <= 0 ||
-                !Number.isFinite(Number(course.hours)) || Number(course.hours) <= 0) {
-                throw new Error(label + " (" + course.code + ") has invalid credits or contact hours.");
+
+            if (
+                !Number.isFinite(Number(course.credits)) ||
+                Number(course.credits) <= 0 ||
+                !Number.isFinite(Number(course.hours)) ||
+                Number(course.hours) <= 0
+            ) {
+
+                throw new Error(
+                    label + " (" + course.code +
+                    ") has invalid credits or contact hours."
+                );
+
             }
+
 
             if (!allowedPrograms.includes(course.program)) {
-                throw new Error(label + " (" + course.code + ") has an unknown program: " + course.program);
+
+                throw new Error(
+                    label + " (" + course.code +
+                    ") has an unknown program: " + course.program
+                );
+
             }
 
+
             if (!allowedTypes.includes(course.type)) {
-                throw new Error(label + " (" + course.code + ") has an unknown course type: " + course.type);
+
+                throw new Error(
+                    label + " (" + course.code +
+                    ") has an unknown course type: " + course.type
+                );
+
             }
+
 
             const codeKey = course.code.toLowerCase();
 
             if (seenCodes.has(codeKey)) {
-                throw new Error("Duplicate course code in file: " + course.code);
+
+                throw new Error(
+                    "Duplicate course code in file: " + course.code
+                );
+
             }
 
             seenCodes.add(codeKey);
+
             return course;
+
         });
+
     }
 
+
+    // ----------------------------------------
+    // 11.1 Export courses
+    // ----------------------------------------
+
     if (exportCoursesButton) {
+
         exportCoursesButton.addEventListener("click", function () {
+
             if (!storageAvailable) {
                 alert("Course storage is unavailable.");
                 return;
@@ -712,50 +1141,76 @@ renderPrograms();
                 return;
             }
 
+
             const backup = {
+
                 system: "DU EEE OBE System",
                 dataType: "courses",
                 version: 1,
                 exportedAt: new Date().toISOString(),
                 courses: courses
+
             };
+
 
             const blob = new Blob(
                 [JSON.stringify(backup, null, 2)],
                 { type: "application/json" }
             );
 
+
             const url = URL.createObjectURL(blob);
+
             const link = document.createElement("a");
+
             const today = new Date().toISOString().slice(0, 10);
 
             link.href = url;
-            link.download = "du-eee-obe-courses-" + today + ".json";
+
+            link.download =
+                "du-eee-obe-courses-" + today + ".json";
+
 
             document.body.appendChild(link);
+
             link.click();
+
             link.remove();
 
+
             setTimeout(function () {
+
                 URL.revokeObjectURL(url);
+
             }, 1000);
+
         });
+
     }
 
+
+    // ----------------------------------------
+    // 11.2 Import courses
+    // ----------------------------------------
+
     if (importCoursesButton && importCoursesFile) {
+
         importCoursesButton.addEventListener("click", function () {
+
             if (!storageAvailable) {
                 alert("Course storage is unavailable.");
                 return;
             }
 
             importCoursesFile.click();
+
         });
 
+
         importCoursesFile.addEventListener("change", function () {
+
             const file = importCoursesFile.files[0];
 
-            // Allows choosing the same file again later.
             importCoursesFile.value = "";
 
             if (!file) {
@@ -763,52 +1218,89 @@ renderPrograms();
             }
 
             if (file.size > 1024 * 1024) {
+
                 alert("The file is too large for a course backup.");
+
                 return;
+
             }
 
+
             file.text().then(function (text) {
+
                 let importedCourses;
 
                 try {
-                    importedCourses = validateImportedCourses(JSON.parse(text));
+
+                    importedCourses = validateImportedCourses(
+                        JSON.parse(text)
+                    );
+
                 } catch (error) {
+
                     console.error("Import failed:", error);
-                    alert("Import failed: " + error.message +
-                        "\n\nYour current courses have not been changed.");
+
+                    alert(
+                        "Import failed: " + error.message +
+                        "\n\nYour current courses have not been changed."
+                    );
+
                     return;
+
                 }
 
+
                 const confirmed = confirm(
-                    "Replace your current " + courses.length + " course(s) with " +
-                    importedCourses.length + " course(s) from \"" + file.name + "\"?" +
-                    "\n\nTip: Export your current courses first if you may need them."
+
+                    "Replace your current " + courses.length +
+                    " course(s) with " + importedCourses.length +
+                    " course(s) from \"" + file.name + "\"?" +
+
+                    "\n\nTip: Export your current courses first " +
+                    "if you may need them."
+
                 );
+
 
                 if (!confirmed) {
                     return;
                 }
 
+
                 if (saveCourses(importedCourses)) {
+
                     resetForm();
+
                     addCourseForm.classList.remove("active");
+
                     renderCourses();
-                    alert(importedCourses.length + " course(s) imported successfully.");
+
+                    alert(
+                        importedCourses.length +
+                        " course(s) imported successfully."
+                    );
+
                 }
+
             }).catch(function (error) {
+
                 console.error("Could not read file:", error);
+
                 alert("The file could not be read.");
+
             });
+
         });
+
     }
 
 
-
     // ----------------------------------------
-    // Initial display
+    // 12. Initial display
     // ----------------------------------------
 
     renderCourses();
 
     console.log("DU EEE OBE System loaded successfully.");
+
 });
