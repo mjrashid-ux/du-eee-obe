@@ -319,8 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
         courseTitle.value = "";
         courseCredits.value = "";
         contactHours.value = "";
-
-        courseProgram.selectedIndex = 0;
+renderCourseProgramOptions();
         courseType.selectedIndex = 0;
 
         editingIndex = null;
@@ -456,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
         courseCredits.value = course.credits;
         contactHours.value = course.hours;
 
-        courseProgram.value = course.program;
+      renderCourseProgramOptions(course.program);
         courseType.value = course.type;
 
         editingIndex = index;
