@@ -290,6 +290,57 @@
     <button type="button" id="add-program-btn">
         + Add New Program
     </button>
+    
+<div id="program-form-container" class="form-container" style="display: none;">
+
+    <h4 id="program-form-title">Add New Program</h4>
+
+    <form id="program-form">
+
+        <div class="form-group">
+            <label for="program-code">Program Code</label>
+            <input type="text" id="program-code"
+                   placeholder="e.g. BSC-EEE" required>
+        </div>
+
+        <div class="form-group">
+            <label for="program-name">Program Name</label>
+            <input type="text" id="program-name"
+                   placeholder="e.g. B.Sc. in EEE" required>
+        </div>
+
+        <div class="form-group">
+            <label for="program-department">Department</label>
+            <input type="text" id="program-department"
+                   value="Electrical and Electronic Engineering" required>
+        </div>
+
+        <div class="form-group">
+            <label for="program-university">University</label>
+            <input type="text" id="program-university"
+                   value="University of Dhaka" required>
+        </div>
+
+        <div class="form-group">
+            <label for="program-status">Status</label>
+            <select id="program-status" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+
+        <button type="submit" id="save-program-btn">
+            Save Program
+        </button>
+
+        <button type="button" id="cancel-program-btn">
+            Cancel
+        </button>
+
+    </form>
+
+</div>
+
 
     <div class="table-container">
         <table>
